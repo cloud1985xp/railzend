@@ -11,16 +11,23 @@ module Railzend
       def head_title
         HeadTitle
       end
-      
+      def head_meta
+        HeadMeta
+      end
       class HeadTitle
-        @@title
+        @@title = []
         def self.append title
           @@title << title
+          self
         end
-        def to_s
-          "<title>#{@@title.join('|')}</title>"
+        def self.to_s
+          "<title>#{@@title.join(' | ')}</title>".html_safe
         end
-        
+      end
+      class HeadMeta
+        def self.to_s
+          ""
+        end
       end
       
     end
