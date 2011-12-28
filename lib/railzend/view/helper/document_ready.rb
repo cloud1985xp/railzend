@@ -2,9 +2,9 @@ module Railzend
   module View
     module Helper
       module DocumentReady
-        @@scripts = []
+        @scripts = []
         def scripts
-          @@scripts
+          @scripts
         end
         def document_ready( script )
           scripts << script
