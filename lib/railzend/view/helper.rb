@@ -3,13 +3,20 @@ require "railzend/view/helper/facebook"
 module Railzend
   module View
     module Helper  
+      
+      # def self.included(receiver)
+      #   @
+      # end
+      # 
+      # def init
+      #   @test.join('_')
+      # end
+      
       include Railzend::View::Helper::DocumentReady
       include Railzend::View::Helper::Facebook
       def image_placehold( width , height , alt = '' )
         image_tag( "http://placehold.it/#{width.to_s}x#{height.to_s}" , { :alt => alt } )
-      end
-      
-      
+      end      
       def head_title
         HeadTitle
       end
@@ -17,13 +24,19 @@ module Railzend
         HeadMeta
       end
       class HeadTitle
-        @title = []
-        def self.append title
-          @title << title
+        @@title =[]
+        @@glue = " | "
+        def self.append(t)
+          @@title << t
           self
         end
+        def self.glue(g)
+          @@glue=g
+        end
         def self.to_s
-          "<title>#{@@title.join(' | ')}</title>".html_safe
+          s = @@title.join(@@glue)
+          @@title = []
+          "<title>#{s}</title>".html_safe
         end
       end
       class HeadMeta
