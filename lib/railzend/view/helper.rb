@@ -1,5 +1,5 @@
-require "railzend/view/helper/document_ready"
-require "railzend/view/helper/facebook"
+# require "railzend/view/helper/document_ready"
+# require "railzend/view/helper/facebook"
 require "railzend/view/helper/head_title"
 module Railzend::View::Helper
   def self.included(receiver)
@@ -29,10 +29,10 @@ module Railzend::View::Helper
     # Railzend::View::Helper::HeadMeta
   end
   def document_ready
-    Railzend::View::Helper::DocumentReady
+    # Railzend::View::Helper::DocumentReady
   end
   def facebook
-    Railzend::View::Helper::Facebook
+    # Railzend::View::Helper::Facebook
   end
   
   
