@@ -1,6 +1,7 @@
 require "railzend/view/helper/document_ready"
 require "railzend/view/helper/facebook"
 require "railzend/view/helper/head_title"
+require "railzend/view/helper/head_script"
 module Railzend::View::Helper
   def self.included(receiver)
     receiver.extend ClassMethods
