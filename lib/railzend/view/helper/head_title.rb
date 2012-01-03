@@ -10,6 +10,7 @@ module Railzend
         end
         def self.glue(g)
           @@glue=g
+          self
         end
         def self.to_s
           s = @@title.join(@@glue)

@@ -14,7 +14,8 @@ module Railzend::View::Helper
                   fjs.parentNode.insertBefore(js, fjs);
                   }(document, 'script', 'facebook-jssdk'));
       eos
-      head_script.append( script.html_safe )
+      # Railzend::View::Helper.head_script.append( script.html_safe )
+      Railzend::View::Helper::HeadScript.append( script.html_safe )
       "<div class='fb-comments' data-href='#{url}' data-num-post='#{num}' data-width='#{width}'></div>".html_safe
     end
     
