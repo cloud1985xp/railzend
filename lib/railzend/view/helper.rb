@@ -15,6 +15,11 @@ module Railzend::View::Helper
     def image_placehold( width , height , alt = '' )
       image_tag( "http://placehold.it/#{width.to_s}x#{height.to_s}" , { :alt => alt } )
     end
+    def render_body_class( class_name = nil )
+      classes = ["#{controller_name}-controller","#{action_name}-action"]
+      classes << class_name unless class_name.nil?
+      classes.join(" ")
+    end
     def head_title
       Railzend::View::Helper::HeadTitle
     end
