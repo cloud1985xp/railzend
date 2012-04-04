@@ -15,11 +15,28 @@ module Railzend::View::Helper
     def image_placehold( width , height , alt = '' )
       image_tag( "http://placehold.it/#{width.to_s}x#{height.to_s}" , { :alt => alt } )
     end
+
     def render_body_class( class_name = nil )
       classes = ["#{controller_name}-controller","#{action_name}-action"]
       classes << class_name unless class_name.nil?
       classes.join(" ")
     end
+
+    
+    def render_body_tag
+      class_attribute = ["#{controller_name}-controller","#{action_name}-action"].join(" ")
+      id_attribute = (@body_id)? " id=\"#{@body_id}-page\"" : ""
+
+      raw(%Q|<!--[if lt IE 7 ]>
+<body class="#{class_attribute} ie6"><![endif]-->
+<!--[if gte IE 7 ]>
+<body class="#{class_attribute} ie"><![endif]-->
+<!--[if !IE]>-->
+<body#{id_attribute} class="#{class_attribute}">
+<!--<![endif]-->|)
+
+    end
+    
     def head_title
       Railzend::View::Helper::HeadTitle
     end
