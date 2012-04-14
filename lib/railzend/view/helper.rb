@@ -1,3 +1,4 @@
+#encoding:utf-8
 require "railzend/view/helper/document_ready"
 require "railzend/view/helper/facebook"
 require "railzend/view/helper/head_title"
@@ -36,6 +37,36 @@ module Railzend::View::Helper
 <!--<![endif]-->|)
 
     end
+    
+    def render_if_table_empty( collection , colspan = 1 , message = nil? , type = 'info' )
+      return '' if collection.length > 0
+      content_tag( 'tr' , content_tag( 'td' , alert_message( message ), :colspan => colspan ) )
+    end
+    
+    def alert_message( message , type = 'info' )
+      anchor = content_tag(:a,'×',{:class=>'close','data-dismiss'=>'alert'})
+      content_tag('div', (message+anchor).html_safe, :class => "alert alert-#{type} fade in" )
+    end
+    
+    def flash_message
+      message = []
+      [:error , :success , :info , :notice ].each do |type|
+        if flash[type].presence
+          message << alert_message( flash[type] , type )
+        end
+      end
+      if message.length > 0
+        message << javascript_tag("setTimeout(function(){$('.alert').alert('close')},2000);")
+      end
+        flash.discard
+      message.join.html_safe
+    end
+    
+    def flash_message_js selector = '#flash-message-container'
+      "$('#{selector}').prepend('#{escape_javascript(flash_message)}');".html_safe + 
+      "setTimeout(function(){$('.alert').alert('close')},2000);".html_safe
+    end
+    
     
     def head_title
       Railzend::View::Helper::HeadTitle
