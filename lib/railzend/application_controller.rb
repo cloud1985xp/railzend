@@ -35,7 +35,7 @@ module Railzend
         respond_to do |format|
           format.js { render }
           format.json { render }
-          format.html { return redirect_to send( object_name + '_path' , object ) }
+          format.html { return redirect_to redirect_after_create( object ) }
         end
       else
         render :action => :new
@@ -51,10 +51,22 @@ module Railzend
         respond_to do |format|
           format.js { render }
           format.json { render }
-          format.html { return redirect_to send( object_name + '_path' , object ) }
+          format.html { return redirect_to redirect_after_update( object ) }
         end
       else
         render :action => :edit
+      end
+    end
+    
+    def destroy
+      object_name = controller_name.singularize
+      object = @model.find( params[:id])
+      instance_variable_set("@#{object_name}", object );
+      object.destroy
+      respond_to do |format|
+        format.js { render }
+        format.json { render }
+        format.html { return redirect_to redirect_after_destroy( object ) }
       end
     end
 
@@ -64,6 +76,20 @@ module Railzend
       @model = model_name.constantize;
       # objects = @model.find(:all)
       # instance_variable_set("@#{controller_name}", objects );
+    end
+    
+    def redirect_after_create object
+      object_name = controller_name.singularize      
+      send( object_name + '_path' , object )
+    end
+    
+    def redirect_after_update object
+      object_name = controller_name.singularize      
+      send( object_name + '_path' , object )
+    end
+    
+    def redirect_after_destroy object
+      send( controller_name + '_path' )
     end
   end
 end
