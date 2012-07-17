@@ -1,0 +1,6 @@
+.page-header
+	%h2 New <%= resource_name.capitalize %>
+.btn-group
+	=link_to 'Back to Index' , <%= (class_path+[resource_name.pluralize]).join('_')%>_path , :class => 'btn'
+%hr	
+=render 'form'

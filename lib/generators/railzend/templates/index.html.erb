@@ -1,0 +1,18 @@
+.page-header
+	%h2 #{<% resource_name.pluralize.capitalize%>} Index
+.btn-group
+	=link_to 'New' , new_<%= (class_path+[resource_name]).join('_')%>_path , :class => 'btn'
+%table.table
+	%thead
+		%tr
+			%th Id
+			%th Operations
+	%tbody
+		-@<%= resource_name.pluralize%>.each do |<%= resource_name%>|
+			%tr
+				%td= <%= resource_name%>.id
+				%td
+					.btn-group
+						=link_to 'Show' , <%= (class_path+[resource_name]).join('_')%>_path( <%= resource_name%>) , :class => 'btn'
+						=link_to 'Edit', edit_<%= (class_path+[resource_name]).join('_')%>_path( <%= resource_name%>) , :class => 'btn'
+						=link_to 'Delete' , <%= (class_path+[resource_name]).join('_')%>_path( <%= resource_name%>) , :method => :delete , :confirm => 'Delete it ?' , :class => 'btn'

@@ -4,7 +4,7 @@ module Railzend::View::Helper
       "<p class=\"#{class_name}\"><iframe src=\"http://www.facebook.com/plugins/like.php?href=#{url}&layout=standard&show_faces=true&width=450&action=like&colorscheme=light&locale=zh_TW\" scrolling=\"no\" frameborder=\"0\" allowTransparency=\"true\" style=\"border:none; overflow:hidden; width:450px; height: 30px\"></iframe></p>".html_safe;
     end
     
-    def self.comment( url = '', num = 10 , width = 500 )
+    def self.comment( url = '' , width = 500 , num = 10)
       script = <<-eos
                   (function(d, s, id) {
                   var js, fjs = d.getElementsByTagName(s)[0];
