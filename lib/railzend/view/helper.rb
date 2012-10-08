@@ -4,6 +4,7 @@ require "railzend/view/helper/facebook"
 require "railzend/view/helper/head_title"
 require "railzend/view/helper/head_script"
 require "railzend/view/helper/head_meta"
+# require "railzend/view/helper/navigation"
 module Railzend::View::Helper
   def self.included(receiver)
     receiver.extend ClassMethods
@@ -40,7 +41,7 @@ module Railzend::View::Helper
     
     def render_if_table_empty( collection , colspan = 1 , message = nil? , type = 'info' )
       return '' if collection.length > 0
-      content_tag( 'tr' , content_tag( 'td' , alert_message( message ), :colspan => colspan ) )
+      content_tag( 'tr' , content_tag( 'td' , alert_message( message ), :colspan => colspan ) , :class => "table-rows-empty" )
     end
     
     def alert_message( message , type = 'info' )
@@ -67,12 +68,12 @@ module Railzend::View::Helper
       "setTimeout(function(){$('.alert').alert('close')},2000);".html_safe
     end
     
-    def link_to_add_fields( name , f , association )
+    def link_to_add_fields( name , f , association , html_options = {} )
       new_object = f.object.class.reflect_on_association(association).klass.new
           fields = f.simple_fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
             render(association.to_s.singularize + "_fields", :f => builder)
           end
-      link_to_function( name , "add_fields( this,'#{association}','#{escape_javascript(fields).html_safe}' )" )
+      link_to_function( name , "add_fields( this,'#{association}','#{escape_javascript(fields).html_safe}' )" , html_options )
     end
     
     
@@ -91,7 +92,42 @@ module Railzend::View::Helper
     def facebook
       Railzend::View::Helper::Facebook
     end
+    
+    # def navigation current_node
+    #   navigator = Railzend::View::Helper::Navigation.new
+    #   navigator.to_s
+    # end
+    
+    # act as i18n
+    def build_translatable( record )
+      I18n.available_locales.each do |lang|
+        lang = lang.to_s.underscore
+        record.send( "build_#{lang}") if record.send( lang ).nil?
+      end
+      return record
+    end
+    
+    def render_translatable_fields( form , template_file = "form_translatable_fields")
+
+      items ,panes  = [] , []
+
+      I18n.available_locales.each_with_index do |lang,i|
+        items << content_tag( :li , :class => ( i==0 ? "active" : "" ) ) do
+  			  link_to t("language.#{lang.to_s}") , "##{lang.to_s.underscore}" , :data => { :toggle => "tab" }
+  		  end
+  		  panes << content_tag( :div , { :class => ( i==0 ? "tab-pane active" : "tab-pane" ) , :id => lang.to_s.underscore } ) do
+          form.simple_fields_for lang.to_s.underscore.to_sym do |tf|
+            render :partial => template_file , :locals => { :f => tf }
+          end
+        end      
+  		end    
+
+      html = []    
+      html << content_tag( :ul , items.join.html_safe , :class => 'nav nav-tabs' )
+      html << content_tag( :div , panes.join.html_safe , :class => 'tab-content')
+
+      return html.join.html_safe
+    end
+    
   end  
 end
-
-

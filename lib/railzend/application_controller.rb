@@ -69,6 +69,28 @@ module Railzend
         format.html { return redirect_to redirect_after_destroy( object ) }
       end
     end
+    
+    # render error
+    def render_403
+      render_optional_error_file(403)
+    end
+
+    def render_404
+      render_optional_error_file(404)
+    end
+
+    def render_405
+      render_optional_error_file(405)
+    end
+
+    def render_optional_error_file( status_code )
+      status = status_code.to_s
+      if ["404","403","405","422","500"].include?(status)
+        render :template => "/errors/#{status}.html.haml", :status => status, :layout => "application"
+      else
+        render :template => "/errors/unknown.html.haml", :status => status, :layout => "application"
+      end
+    end
 
     protected
     def set_model
