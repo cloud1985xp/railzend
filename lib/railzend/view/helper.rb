@@ -93,6 +93,12 @@ module Railzend::View::Helper
       Railzend::View::Helper::Facebook
     end
     
+    def zerofill v , n
+      # return "00005"
+      ("%0#{n}d" % v)
+    end
+    
+    
     # def navigation current_node
     #   navigator = Railzend::View::Helper::Navigation.new
     #   navigator.to_s
@@ -130,4 +136,9 @@ module Railzend::View::Helper
     end
     
   end  
+  
+  def zerofill v , n
+    # return "00005"
+    ("%0#{n}d" % v)
+  end
 end
