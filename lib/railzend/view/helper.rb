@@ -49,14 +49,14 @@ module Railzend::View::Helper
       content_tag('div', (message+anchor).html_safe, :class => "alert alert-#{type} fade in" )
     end
     
-    def flash_message
+    def flash_message( auto_hide = true )
       message = []
       [:error , :success , :info , :notice ].each do |type|
         if flash[type].presence
           message << alert_message( flash[type] , type )
         end
       end
-      if message.length > 0
+      if message.length > 0 && auto_hide
         message << javascript_tag("setTimeout(function(){$('.alert').alert('close')},2000);")
       end
         flash.discard
