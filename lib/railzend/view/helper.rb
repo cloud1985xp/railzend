@@ -98,6 +98,20 @@ module Railzend::View::Helper
       ("%0#{n}d" % v)
     end
     
+    def month_player( date = Date.today , name = 'date' , path = '' )
+
+      date_prev = date - 1.month
+      date_next = date + 1.month
+      btns = []
+      calendar = []
+      btns << link_to( "<i class='icon-backward'></i> 上個月".html_safe , "#{path}?#{name}=#{date_prev.to_s}" , :class => "btn" , "data-pjax"=>'#main')
+      btns << link_to( "<i class='icon-refresh'></i> #{date.month}月".html_safe , "" , :class=> "btn" , "data-pjax"=>'#main' )
+      btns << link_to( "<i class='icon-forward'></i> 下個月".html_safe , "#{path}?#{name}=#{date_next.to_s}" , :class => "btn" , "data-pjax"=>'#main')
+
+      html = content_tag( 'div' , btns.join().html_safe , {:class=>'btn-group'}) 
+      content_tag( 'div' , html , :class => 'btn-group-inline month-player')
+    end
+    
     
     # def navigation current_node
     #   navigator = Railzend::View::Helper::Navigation.new
