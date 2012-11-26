@@ -14,8 +14,11 @@ module Railzend::View::Helper
   end
   
   module InstanceMethods
-    def image_placehold( width , height , alt = '' )
-      image_tag( "http://placehold.it/#{width.to_s}x#{height.to_s}" , { :alt => alt } )
+    def image_placehold( width , height , options = {} )
+      if options.is_a? String
+        options = { :alt => options }
+      end
+      image_tag( "http://placehold.it/#{width.to_s}x#{height.to_s}" , options )
     end
 
     def render_body_class( class_name = nil )
