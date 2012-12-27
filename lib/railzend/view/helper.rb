@@ -108,7 +108,7 @@ module Railzend::View::Helper
       btns = []
       calendar = []
       btns << link_to( "<i class='icon-backward'></i> 上個月".html_safe , "#{path}?#{name}=#{date_prev.to_s}" , :class => "btn" , "data-pjax"=>'#main')
-      btns << link_to( "<i class='icon-refresh'></i> #{date.month}月".html_safe , "" , :class=> "btn" , "data-pjax"=>'#main' )
+      btns << link_to( "<i class='icon-refresh'></i> #{date.month}月".html_safe , "#{path}?#{name}=#{date.to_s} , :class=> "btn" , "data-pjax"=>'#main' )
       btns << link_to( "<i class='icon-forward'></i> 下個月".html_safe , "#{path}?#{name}=#{date_next.to_s}" , :class => "btn" , "data-pjax"=>'#main')
 
       html = content_tag( 'div' , btns.join().html_safe , {:class=>'btn-group'}) 
