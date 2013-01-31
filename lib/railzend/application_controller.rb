@@ -32,9 +32,10 @@ module Railzend
       object = @model.new( params[object_name])
       instance_variable_set("@#{object_name}", object );
       if object.save
+        action_success_flash_message
         respond_to do |format|
           format.js { render }
-          format.json { render }
+          format.json { render :success => t("action.#{controller_name}.#{action_name}_success") }
           format.html { return redirect_to redirect_after_create( object ) }
         end
       else
@@ -47,10 +48,10 @@ module Railzend
       object = @model.find( params[:id])
       instance_variable_set("@#{object_name}", object );
       if object.update_attributes( params[object_name] )
-        
+        action_success_flash_message
         respond_to do |format|
           format.js { render }
-          format.json { render }
+          format.json { render :success => t("action.#{controller_name}.#{action_name}_success") }
           format.html { return redirect_to redirect_after_update( object ) }
         end
       else
@@ -62,11 +63,13 @@ module Railzend
       object_name = controller_name.singularize
       object = @model.find( params[:id])
       instance_variable_set("@#{object_name}", object );
-      object.destroy
-      respond_to do |format|
-        format.js { render }
-        format.json { render }
-        format.html { return redirect_to redirect_after_destroy( object ) }
+      if object.destroy
+        action_success_flash_message
+        respond_to do |format|
+          format.js { render }
+          format.json { render }
+          format.html { return redirect_to redirect_after_destroy( object ) }
+        end
       end
     end
     
@@ -99,7 +102,9 @@ module Railzend
       # objects = @model.find(:all)
       # instance_variable_set("@#{controller_name}", objects );
     end
-    
+    def action_success_flash_message
+      flash[:success] = t("action.#{controller_name}.#{action_name}_success")
+    end 
     def redirect_after_create object
       object_name = controller_name.singularize      
       send( object_name + '_path' , object )
