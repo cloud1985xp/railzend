@@ -10,9 +10,9 @@ module Railzend::View::Helper
     receiver.extend ClassMethods
     receiver.send :include, InstanceMethods
   end
-  module ClassMethods    
+  module ClassMethods
   end
-  
+
   module InstanceMethods
     def image_placehold( width , height , options = {} )
       if options.is_a? String
@@ -27,7 +27,7 @@ module Railzend::View::Helper
       classes.join(" ")
     end
 
-    
+
     def render_body_tag
       class_attribute = ["#{controller_name}-controller","#{action_name}-action"].join(" ")
       id_attribute = (@body_id)? " id=\"#{@body_id}-page\"" : ""
@@ -41,17 +41,18 @@ module Railzend::View::Helper
 <!--<![endif]-->|)
 
     end
-    
-    def render_if_table_empty( collection , colspan = 1 , message = nil? , type = 'info' )
+
+    def render_if_table_empty( collection , colspan = 1 , message = nil , type = 'info' )
       return '' if collection.length > 0
+      message ||= I18n.t("no_matched_collection", scope: 'railzend.message')
       content_tag( 'tr' , content_tag( 'td' , alert_message( message ), :colspan => colspan ) , :class => "table-rows-empty" )
     end
-    
+
     def alert_message( message , type = 'info' )
       anchor = content_tag(:a,'×',{:class=>'close','data-dismiss'=>'alert'})
       content_tag('div', (message+anchor).html_safe, :class => "alert alert-#{type} fade in" )
     end
-    
+
     def flash_message( auto_hide = true )
       message = []
       [:error , :success , :info , :notice ].each do |type|
@@ -65,12 +66,12 @@ module Railzend::View::Helper
         flash.discard
       message.join.html_safe
     end
-    
+
     def flash_message_js selector = '#flash-message-container'
-      "$('#{selector}').prepend('#{escape_javascript(flash_message)}');".html_safe + 
+      "$('#{selector}').prepend('#{escape_javascript(flash_message)}');".html_safe +
       "setTimeout(function(){$('.alert').alert('close')},2000);".html_safe
     end
-    
+
     def link_to_add_fields( name , f , association , html_options = {} )
       new_object = f.object.class.reflect_on_association(association).klass.new
           fields = f.simple_fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
@@ -78,8 +79,8 @@ module Railzend::View::Helper
           end
       link_to_function( name , "add_fields( this,'#{association}','#{escape_javascript(fields).html_safe}' )" , html_options )
     end
-    
-    
+
+
     def head_title
       Railzend::View::Helper::HeadTitle
     end
@@ -95,12 +96,12 @@ module Railzend::View::Helper
     def facebook
       Railzend::View::Helper::Facebook
     end
-    
+
     def zerofill v , n
       # return "00005"
       ("%0#{n}d" % v)
     end
-    
+
     def month_player( date = Date.today , name = 'date' , path = '' )
 
       date_prev = date - 1.month
@@ -111,16 +112,16 @@ module Railzend::View::Helper
       btns << link_to( "<i class='icon-refresh'></i> #{date.month}月".html_safe , "#{path}?#{name}=#{date.to_s}" , :class=> "btn" , "data-pjax"=>'#main' )
       btns << link_to( "<i class='icon-forward'></i> 下個月".html_safe , "#{path}?#{name}=#{date_next.to_s}" , :class => "btn" , "data-pjax"=>'#main')
 
-      html = content_tag( 'div' , btns.join().html_safe , {:class=>'btn-group'}) 
+      html = content_tag( 'div' , btns.join().html_safe , {:class=>'btn-group'})
       content_tag( 'div' , html , :class => 'btn-group-inline month-player')
     end
-    
-    
+
+
     # def navigation current_node
     #   navigator = Railzend::View::Helper::Navigation.new
     #   navigator.to_s
     # end
-    
+
     # act as i18n
     def build_translatable( record )
       I18n.available_locales.each do |lang|
@@ -129,7 +130,7 @@ module Railzend::View::Helper
       end
       return record
     end
-    
+
     def render_translatable_fields( form , template_file = "form_translatable_fields")
 
       items ,panes  = [] , []
@@ -142,18 +143,18 @@ module Railzend::View::Helper
           form.simple_fields_for lang.to_s.underscore.to_sym do |tf|
             render :partial => template_file , :locals => { :f => tf }
           end
-        end      
-  		end    
+        end
+  		end
 
-      html = []    
+      html = []
       html << content_tag( :ul , items.join.html_safe , :class => 'nav nav-tabs' )
       html << content_tag( :div , panes.join.html_safe , :class => 'tab-content')
 
       return html.join.html_safe
     end
-    
-  end  
-  
+
+  end
+
   def zerofill v , n
     # return "00005"
     ("%0#{n}d" % v)
